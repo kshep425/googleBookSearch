@@ -11,7 +11,8 @@
     "install": "cd frontend && npm install",
     "build": "cd frontend && npm run build",
     "heroku-postbuild": "npm run build",
-    "test": "jest"
+    "test": "jest --watch",
+    "seed": "node backend/scripts/seedDB.js"
   },
   "repository": {
     "type": "git",
@@ -24,10 +25,16 @@
   },
   "homepage": "https://github.com/kshep425/googleBookSearch#readme",
   "devDependencies": {
-    "jest": "^25.1.0",
+    "concurrently": "^5.1.0",
     "nodemon": "^2.0.2"
   },
   "dependencies": {
-    "concurrently": "^5.1.0"
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "if-env": "^1.0.4",
+    "jest": "^23.6.0",
+    "mongoose": "^5.9.5"
   }
 }

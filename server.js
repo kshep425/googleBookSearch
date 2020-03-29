@@ -1,53 +1,29 @@
-// *****************************************************************************
-// Server.js - This file is the initial starting point for the Node/Express server.
-//
-// ******************************************************************************
-// *** Dependencies
-// =============================================================
 const express = require("express");
 const session = require("express-session");
+const mongoose = require("mongoose");
+const routes = require("./backend/routes");
 
-// Requiring dotenv for syncing variable
+console.log(routes)
+
 require("dotenv").config();
 
-// Sets up the Express App
-// =============================================================
-
-// Setting up port
 const PORT = process.env.PORT || 3001;
-
-// Requiring our models for syncing
-// const db = require("./Backend/models");
-
-// Creating express app and configuring middleware needed for authentication
 const app = express();
 
-// Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(routes);
 
-// Static directory
-app.use(express.static("frontend/build"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+}
 
-//else {
-//   app.use(express.static("./frontend/public"));
-// }
-
-// We need to use sessions to keep track of our user's login status
 app.use(
   session({ secret: "keyboard cat", resave: true, saveUninitialized: true })
 );
 
-// Routes
-// =============================================================
-require("./Backend/routes/booksApi")(app);
-// Syncing our sequelize models and then starting our Express app
-// =============================================================
-//const sync = JSON.parse(process.env.DB_SYNC) || true;
-//db.sequelize.sync({ force: sync }).then(function() {
-  app.listen(PORT, function() {
-    console.log("App listening on PORT " + PORT);
-  });
-//});
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/googleBookSearch", { useNewUrlParser: true, useUnifiedTopology: true });
 
-module.exports = app;
+app.listen(PORT, function () {
+  console.log("App listening on PORT " + PORT);
+});
